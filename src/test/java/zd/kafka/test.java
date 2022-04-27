@@ -145,12 +145,24 @@ public class test {
      * @throws ExecutionException
      * @throws InterruptedException
      */
+//    @Test
+//    public void testSyncSend() throws ExecutionException, InterruptedException {
+//        for (int i = 0; i < 10; i++) {
+//            int id = (int) (System.currentTimeMillis() / 1000);
+//            SendResult result = demo06Producer.syncSend(id);
+//            logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, result);
+//        }
+//
+//        // 阻塞等待，保证消费
+//        new CountDownLatch(1).await();
+//    }
+
     @Test
-    public void testSyncSend() throws ExecutionException, InterruptedException {
+    public void testSyncSendOrderly() throws ExecutionException, InterruptedException {
         for (int i = 0; i < 10; i++) {
-            int id = (int) (System.currentTimeMillis() / 1000);
-            SendResult result = demo06Producer.syncSend(id);
-            logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, result);
+            int id = 1;
+            SendResult result = demo06Producer.syncSendOrderly(id);
+            logger.info("[testSyncSend][发送编号：[{}] 发送队列：[{}]]", id, result.getRecordMetadata().partition());
         }
 
         // 阻塞等待，保证消费
