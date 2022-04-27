@@ -10,6 +10,7 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 import zd.kafka.producer.Demo01Producer;
+import zd.kafka.producer.Demo06Producer;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -29,6 +30,9 @@ public class test {
 
     @Autowired
     private Demo01Producer producer;
+
+    @Autowired
+    private Demo06Producer  demo06Producer;
 
 //    @Test
 //    public void testSyncSend() throws ExecutionException, InterruptedException {
@@ -115,22 +119,39 @@ public class test {
 //    }
 
 
-    @Test
-    public void test() throws InterruptedException {
-        // 阻塞等待，保证消费
-        new CountDownLatch(1).await();
-    }
+//    @Test
+//    public void test() throws InterruptedException {
+//        // 阻塞等待，保证消费
+//        new CountDownLatch(1).await();
+//    }
 
     /**
      * 广播模式，使同一个消费者组的所有消费者都有消费所有分区消息
      * @throws ExecutionException
      * @throws InterruptedException
      */
+//    @Test
+//    public void testSyncSendRadio() throws ExecutionException, InterruptedException {
+//        int id = (int) (System.currentTimeMillis() / 1000);
+//        SendResult result = producer.syncSend(id);
+//        logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, result);
+//
+//        // 阻塞等待，保证消费
+//        new CountDownLatch(1).await();
+//    }
+
+    /**
+     * 测试kafka并发消费
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
-    public void testSyncSendRadio() throws ExecutionException, InterruptedException {
-        int id = (int) (System.currentTimeMillis() / 1000);
-        SendResult result = producer.syncSend(id);
-        logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, result);
+    public void testSyncSend() throws ExecutionException, InterruptedException {
+        for (int i = 0; i < 10; i++) {
+            int id = (int) (System.currentTimeMillis() / 1000);
+            SendResult result = demo06Producer.syncSend(id);
+            logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, result);
+        }
 
         // 阻塞等待，保证消费
         new CountDownLatch(1).await();
