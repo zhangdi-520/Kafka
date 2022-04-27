@@ -15,7 +15,7 @@ import java.util.List;
  * @author: Mr.Zhang
  * @create: 2022-04-26 10:12
  **/
-@Component
+//@Component
 public class Demo02Consumer {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

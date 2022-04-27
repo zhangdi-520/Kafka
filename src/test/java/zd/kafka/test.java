@@ -98,4 +98,19 @@ public class test {
         // 阻塞等待，保证消费
         new CountDownLatch(1).await();
     }
+
+    /**
+     * 模拟消费失败场景
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    @Test
+    public void testSyncSendError() throws ExecutionException, InterruptedException {
+        int id = (int) (System.currentTimeMillis() / 1000);
+        SendResult result = producer.syncSend(id);
+        logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, result);
+
+        // 阻塞等待，保证消费
+        new CountDownLatch(1).await();
+    }
 }
