@@ -30,36 +30,36 @@ public class test {
     @Autowired
     private Demo01Producer producer;
 
-    @Test
-    public void testSyncSend() throws ExecutionException, InterruptedException {
-        int id = (int)(System.currentTimeMillis()/1000);
-        SendResult sendResult = producer.syncSend(id);
-        logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, sendResult);
+//    @Test
+//    public void testSyncSend() throws ExecutionException, InterruptedException {
+//        int id = (int)(System.currentTimeMillis()/1000);
+//        SendResult sendResult = producer.syncSend(id);
+//        logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, sendResult);
+//
+//        // 阻塞等待，保证消费
+//        new CountDownLatch(1).await();
+//    }
 
-        // 阻塞等待，保证消费
-        new CountDownLatch(1).await();
-    }
-
-    @Test
-    public void testASyncSend() throws InterruptedException {
-        int id = (int) (System.currentTimeMillis() / 1000);
-        producer.asyncSend(id).addCallback(new ListenableFutureCallback<SendResult<Object, Object>>() {
-
-            @Override
-            public void onFailure(Throwable e) {
-                logger.info("[testASyncSend][发送编号：[{}] 发送异常]]", id, e);
-            }
-
-            @Override
-            public void onSuccess(SendResult<Object, Object> result) {
-                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", id, result);
-            }
-
-        });
-
-        // 阻塞等待，保证消费
-        new CountDownLatch(1).await();
-    }
+//    @Test
+//    public void testASyncSend() throws InterruptedException {
+//        int id = (int) (System.currentTimeMillis() / 1000);
+//        producer.asyncSend(id).addCallback(new ListenableFutureCallback<SendResult<Object, Object>>() {
+//
+//            @Override
+//            public void onFailure(Throwable e) {
+//                logger.info("[testASyncSend][发送编号：[{}] 发送异常]]", id, e);
+//            }
+//
+//            @Override
+//            public void onSuccess(SendResult<Object, Object> result) {
+//                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", id, result);
+//            }
+//
+//        });
+//
+//        // 阻塞等待，保证消费
+//        new CountDownLatch(1).await();
+//    }
 
 
     /**
@@ -71,41 +71,63 @@ public class test {
      *
      * kafka批量发送，一二参数满足条件发送，三参数到了等待时间立刻发送，不用考虑一二参数是否符合
      */
-    @Test
-    public void testASyncSendAll() throws InterruptedException {
-        logger.info("[testASyncSend][开始执行]");
-
-        for (int i = 0; i < 3; i++) {
-            int id = (int) (System.currentTimeMillis() / 1000);
-            producer.asyncSend(id).addCallback(new ListenableFutureCallback<SendResult<Object, Object>>() {
-
-                @Override
-                public void onFailure(Throwable e) {
-                    logger.info("[testASyncSend][发送编号：[{}] 发送异常]]", id, e);
-                }
-
-                @Override
-                public void onSuccess(SendResult<Object, Object> result) {
-                    logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", id, result);
-                }
-
-            });
-
-            // 故意每条消息之间，隔离 10 秒
-            Thread.sleep(10 * 1000L);
-        }
-
-        // 阻塞等待，保证消费
-        new CountDownLatch(1).await();
-    }
+//    @Test
+//    public void testASyncSendAll() throws InterruptedException {
+//        logger.info("[testASyncSend][开始执行]");
+//
+//        for (int i = 0; i < 3; i++) {
+//            int id = (int) (System.currentTimeMillis() / 1000);
+//            producer.asyncSend(id).addCallback(new ListenableFutureCallback<SendResult<Object, Object>>() {
+//
+//                @Override
+//                public void onFailure(Throwable e) {
+//                    logger.info("[testASyncSend][发送编号：[{}] 发送异常]]", id, e);
+//                }
+//
+//                @Override
+//                public void onSuccess(SendResult<Object, Object> result) {
+//                    logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", id, result);
+//                }
+//
+//            });
+//
+//            // 故意每条消息之间，隔离 10 秒
+//            Thread.sleep(10 * 1000L);
+//        }
+//
+//        // 阻塞等待，保证消费
+//        new CountDownLatch(1).await();
+//    }
 
     /**
      * 模拟消费失败场景
      * @throws ExecutionException
      * @throws InterruptedException
      */
+//    @Test
+//    public void testSyncSendError() throws ExecutionException, InterruptedException {
+//        int id = (int) (System.currentTimeMillis() / 1000);
+//        SendResult result = producer.syncSend(id);
+//        logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, result);
+//
+//        // 阻塞等待，保证消费
+//        new CountDownLatch(1).await();
+//    }
+
+
     @Test
-    public void testSyncSendError() throws ExecutionException, InterruptedException {
+    public void test() throws InterruptedException {
+        // 阻塞等待，保证消费
+        new CountDownLatch(1).await();
+    }
+
+    /**
+     * 广播模式，使同一个消费者组的所有消费者都有消费所有分区消息
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    @Test
+    public void testSyncSendRadio() throws ExecutionException, InterruptedException {
         int id = (int) (System.currentTimeMillis() / 1000);
         SendResult result = producer.syncSend(id);
         logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, result);

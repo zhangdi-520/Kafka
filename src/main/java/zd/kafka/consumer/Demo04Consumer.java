@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author: Mr.Zhang
  * @create: 2022-04-26 11:08
  **/
-@Component
+//@Component
 public class Demo04Consumer {
 
     private AtomicInteger count = new AtomicInteger(0);
