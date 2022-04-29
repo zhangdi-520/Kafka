@@ -13,7 +13,7 @@ import zd.kafka.message.Demo06Message;
  * @author: Mr.Zhang
  * @create: 2022-04-27 10:42
  **/
-@Component
+//@Component
 public class Demo06Consumer {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

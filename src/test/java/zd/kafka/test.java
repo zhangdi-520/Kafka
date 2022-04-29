@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 import zd.kafka.producer.Demo01Producer;
 import zd.kafka.producer.Demo06Producer;
+import zd.kafka.producer.Demo07Producer;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -33,6 +34,9 @@ public class test {
 
     @Autowired
     private Demo06Producer  demo06Producer;
+
+    @Autowired
+    private Demo07Producer demo07Producer;
 
 //    @Test
 //    public void testSyncSend() throws ExecutionException, InterruptedException {
@@ -157,12 +161,54 @@ public class test {
 //        new CountDownLatch(1).await();
 //    }
 
+//    @Test
+//    public void testSyncSendOrderly() throws ExecutionException, InterruptedException {
+//        for (int i = 0; i < 10; i++) {
+//            int id = 1;
+//            SendResult result = demo06Producer.syncSendOrderly(id);
+//            logger.info("[testSyncSend][发送编号：[{}] 发送队列：[{}]]", id, result.getRecordMetadata().partition());
+//        }
+//
+//        // 阻塞等待，保证消费
+//        new CountDownLatch(1).await();
+//    }
+
+    /**
+     * 测试kafka事务
+     */
+//    @Test
+//    public void testSyncSendInTransaction() throws ExecutionException, InterruptedException {
+//        int id = (int) (System.currentTimeMillis() / 1000);
+//        demo07Producer.syncSendInTransaction(id, new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                logger.info("[run][我要开始睡觉了]");
+//                try {
+//                    Thread.sleep(10 * 1000L);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                logger.info("[run][我睡醒了]");
+//            }
+//
+//        });
+//
+//        // 阻塞等待，保证消费
+//        new CountDownLatch(1).await();
+//    }
+
+
+    /**
+     * 测试kafka偏移量提交
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @Test
-    public void testSyncSendOrderly() throws ExecutionException, InterruptedException {
-        for (int i = 0; i < 10; i++) {
-            int id = 1;
-            SendResult result = demo06Producer.syncSendOrderly(id);
-            logger.info("[testSyncSend][发送编号：[{}] 发送队列：[{}]]", id, result.getRecordMetadata().partition());
+    public void testSyncSend() throws ExecutionException, InterruptedException {
+        for (int id = 1; id <= 2; id++) {
+            SendResult result = demo07Producer.syncSend(id);
+            logger.info("[testSyncSend][发送编号：[{}] 发送结果：[{}]]", id, result);
         }
 
         // 阻塞等待，保证消费
